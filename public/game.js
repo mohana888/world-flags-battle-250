@@ -1,4 +1,28 @@
 const socket = io();
+const bgMusic = document.getElementById("bgMusic");
+const musicToggle = document.getElementById("musicToggle");
+
+bgMusic.volume = 0.25;
+
+function startMusic() {
+  bgMusic.play().then(() => {
+    musicToggle.textContent = "🔊 MUSIC ON";
+  }).catch(() => {});
+}
+
+function toggleMusic() {
+  if (bgMusic.paused) {
+    startMusic();
+  } else {
+    bgMusic.pause();
+    musicToggle.textContent = "🔇 MUSIC OFF";
+  }
+}
+
+musicToggle.onclick = toggleMusic;
+
+// Start music after the first user interaction.
+document.addEventListener("pointerdown", startMusic, { once: true });
 const c = document.getElementById("game");
 const x = c.getContext("2d");
 const eventEl = document.getElementById("event");
@@ -29,7 +53,7 @@ function loadFlag(code) {
 socket.on("state", v => {
   s = v;
   for (const t of v.teams) loadFlag(t.code);
-  eventEl.textContent = v.event;`; }
+  eventEl.textContent = v.event;
   stats.textContent = `${v.survivors} / 250 SURVIVING  •  ROUND ${v.round}`;
   renderLeader();
 
