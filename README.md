@@ -1,3 +1,4 @@
+
 # WORLD FLAGS BATTLE — 250
 
 A 250-flag real-time battle royale designed for live streaming.
@@ -252,3 +253,6 @@ Every flag keeps the same fast movement speed for the entire battle:
 - No slowdown over time
 - No 30-second forced finish
 - Battle continues until only one flag remains
+
+# world-flags-battle-250
+
