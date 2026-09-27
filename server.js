@@ -71,13 +71,19 @@ const teams = COUNTRIES.map((c,i)=>{
     mass:1
   };
 });
-
+function shuffleTeams(){
+  for(let i=teams.length-1;i>0;i--){
+    const j=Math.floor(rand()*(i+1));
+    [teams[i],teams[j]]=[teams[j],teams[i]];
+  }
+}
 function reset(){
   round++;
   running=true; winner=null; elapsed=0; nextEvent=8; particles=[]; lastElimination=null;
   gateAngle = -Math.PI / 2;
   event=`🌍 ROUND ${round} — ALL 250 FLAGS ENTER THE ARENA`;
   rand=mulberry32(2502026+round*9973);
+  shuffleTeams();
   teams.forEach((t,i)=>{
     const pos=centralSpawn(i,round);
     t.x=pos.x;
@@ -249,11 +255,15 @@ function physics(){
   // only condition for becoming champion.
   const survivors=teams.filter(t=>t.alive);
   if(survivors.length===1){
-    winner=survivors[0].id;
-    running=false;
-    event=`🏆 30-SECOND WINNER → ${survivors[0].flag} ${survivors[0].name} WINS`;
-  }
+  winner=survivors[0].id;
+  running=false;
+  event=`🏆 WINNER → ${survivors[0].flag} ${survivors[0].name} WINS`;
 
+  setTimeout(() => {
+    reset();
+    io.emit("state", snapshot());
+  }, 5000);
+}
   particles=particles.filter(p=>(p.life-=DT)>0);
   for(const p of particles){p.x+=p.vx*DT;p.y+=p.vy*DT;p.vx*=.94;p.vy*=.94;}
 }
