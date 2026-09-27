@@ -29,7 +29,7 @@ function loadFlag(code) {
 socket.on("state", v => {
   s = v;
   for (const t of v.teams) loadFlag(t.code);
-  eventEl.textContent = v.event;`; }
+  eventEl.textContent = v.event;
   stats.textContent = `${v.survivors} / 250 SURVIVING  •  ROUND ${v.round}`;
   renderLeader();
 
